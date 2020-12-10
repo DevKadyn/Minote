@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <!-- Meta Data -->
+  <title>Minote App</title>
+  <meta name="author" content="Kadyn Wishcop">
+  <meta name="description" content="Motes">
+  <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+  <meta content="utf-8" http-equiv="encoding">
+  <meta name="viewport" content="user-scalable=no"> <!-- Disables Zoom/Scaling for mobile Devices. User can bypass this by viewing in desktop mode -->
+
+  <!-- Load CSS & JS Files -->
+  <link rel="stylesheet" href="css/app.css">
+</head>
+<body>
+
+  <div id="savePopUp">
+    <div class="exitButton" onClick="exit()"><img src="img/buttons/exitButton.png" alt="Previous Song" width="24px" height="24px"></div>
+    <div class="baseHeader">How should we save?</div>
+    <div class="baseText">Since Minote is a browser based note taking app and we don't store any of your ntoes, you should probably save. We offer the options below to save your file.</div>
+    <div class="centerMe">
+      <div class="popupButton saveButton floatLeft" onClick="saveNoteTXT()">TXT</div>
+      <div class="popupButton saveButton floatLeft" onClick="saveNoteRTF()">RTF</div>
+    </div>
+  </div>
+
+  <div id="paper">
+    <div id="title" class="floatLeft">Minote</div>
+    <div class="button floatRight" onClick="savePopUp()"><img src="img/buttons/downloadNote.png" alt="Download Note" width="22.5px" height="30px"></div>
+    <div class="button floatRight" onClick="newNote()"><img src="img/buttons/newNote.png" alt="New note" width="22.5px" height="30px"></div>
+
+    <div id="note">
+      <textarea id="noteHeader" autofocus rows="1">New Header...</textarea>
+      <textarea id="noteText" >New Text...</textarea>
+    </div>
+  </div>
+
+  <!-- START SCRIPTS -->
+  <script>
+
+  function exit() {
+    document.getElementById("savePopUp").style.display = "none";
+  }
+
+  function newNote() {
+    console.log("Motes: Creating a new note.")
+    document.getElementById("noteHeader").value = "New Header...";
+    document.getElementById("noteText").value = "New Text...";
+  }
+
+  function savePopUp() {
+    document.getElementById("savePopUp").style.display = "block";
+  }
+
+  function saveNoteTXT() {
+    console.log("Motes: Saving your note.")
+
+    let noteHeader = document.getElementById("noteHeader").value
+    let noteText = document.getElementById("noteText").value
+
+    const downloadToFile = (content, filename, contentType) => {
+      const a = document.createElement('a');
+      const file = new Blob([content], {type: contentType});
+
+      a.href= URL.createObjectURL(file);
+      a.download = filename;
+      a.click();
+
+      URL.revokeObjectURL(a.href);
+    };
+
+    createNote = noteHeader + noteText;
+    downloadToFile(createNote, noteHeader + '.txt', 'text/plain');
+    exit()
+  }
+
+  function saveNoteRTF() {
+    console.log("Motes: Saving your note.")
+
+    let noteHeader = document.getElementById("noteHeader").value
+    let noteText = document.getElementById("noteText").value
+
+    const downloadToFile = (content, filename, contentType) => {
+      const a = document.createElement('a');
+      const file = new Blob([content], {type: contentType});
+
+      a.href= URL.createObjectURL(file);
+      a.download = filename;
+      a.click();
+
+      URL.revokeObjectURL(a.href);
+    };
+
+    createNote = "{\\rtf1\\ansi\\ansicpg1252\\deff0\\nouicompat{\\fonttbl{\\f0\\fnil\\fcharset0 Calibri;}}{\\*\\generator Riched20 10.0.19041}\\viewkind4\\uc1\\pard\\sa200\\sl276\\slmult1\\b\\f0\\fs40\\lang9 " + noteHeader + "\\b0\\fs22\\par\\fs24 " + noteText + "\\fs22\\par}"
+    downloadToFile(createNote, noteHeader + '.rtf', 'text/rtf');
+    exit()
+  }
+
+  function saveNoteBrowser() {
+    localStorage.setItem('savedHeader01','Sample Header 01')
+    localStorage.setItem('savedText01','Sample Text 01')
+  }
+
+  </script>
+</body>
+</html>
